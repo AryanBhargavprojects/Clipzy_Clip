@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# frontend/build outputs
+dist/
+out/
+*.tsbuildinfo
+
+# Tauri/Rust build outputs
+src-tauri/target/
+src-tauri/binaries/
+
+# downloaded standalone sidecar cache
+vendor/sidecars/
+
+# local agent/tool state
+.omc/
+.pi/
+src-tauri/.omc/
+src-tauri/icons/.omc/
+
+# macOS
+.DS_Store
+
+# logs/env
+*.log
+.env
+.env.*

@@ -1,0 +1,1111 @@
+@keyframes clipzy-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes clipzy-pulse-glow {
+  0%, 100% { opacity: 0.34; transform: scale(1); }
+  50% { opacity: 0.68; transform: scale(1.08); }
+}
+
+@keyframes clipzy-ribbon-shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: 0% center; }
+}
+
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 0;
+  background: #050505;
+  color: #fff;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.clipzy-root {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: #050505;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.clipzy-shell {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(48px) saturate(180%);
+  -webkit-backdrop-filter: blur(48px) saturate(180%);
+}
+
+.clipzy-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(21, 93, 252, 0.28), transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.clipzy-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.clipzy-orb--a {
+  width: 220px;
+  height: 220px;
+  top: -120px;
+  right: -120px;
+  background: rgba(82, 168, 255, 0.2);
+}
+
+.clipzy-orb--b {
+  width: 220px;
+  height: 220px;
+  bottom: -120px;
+  left: -120px;
+  background: rgba(21, 93, 252, 0.18);
+}
+
+.glass-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.02);
+}
+
+.liquid-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.4);
+  border-radius: 14px;
+  color: #fff;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.liquid-input::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.liquid-input:focus,
+.liquid-input:focus-visible {
+  outline: none;
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(82, 168, 255, 0.48);
+  box-shadow:
+    inset 0 1px 4px rgba(0, 0, 0, 0.4),
+    0 0 0 2px rgba(82, 168, 255, 0.18);
+}
+
+.jewel-button-primary {
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-top-color: rgba(255, 255, 255, 0.52);
+  background: #155dfc;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.4),
+    0 8px 18px rgba(21, 93, 252, 0.38);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.jewel-button-primary:hover {
+  background: #104ccf;
+  box-shadow:
+    inset 0 1px 6px rgba(255, 255, 255, 0.46),
+    0 10px 24px rgba(21, 93, 252, 0.46);
+}
+
+.jewel-button-primary:active {
+  transform: scale(0.985);
+}
+
+.jewel-button-primary:disabled {
+  opacity: 0.68;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.jewel-button-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+
+.clipzy-danger-action {
+  border: 1px solid rgba(248, 113, 113, 0.36);
+  background: rgba(127, 29, 29, 0.34);
+  color: #fecaca;
+  border-radius: 999px;
+  padding: 11px 15px;
+  font-weight: 800;
+}
+
+.clipzy-danger-action:hover {
+  background: rgba(185, 28, 28, 0.44);
+  color: #fff;
+}
+
+.clipzy-danger-action:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.clipzy-danger-action--compact {
+  padding: 7px 10px;
+  font-size: 0.72rem;
+}
+
+.clipzy-header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.clipzy-top-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.clipzy-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 11px;
+  color: rgba(255, 255, 255, 0.62);
+  background: transparent;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.clipzy-icon-button:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.clipzy-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+  font-size: 1.2rem;
+  font-family: Manrope, Inter, system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  padding: 4px 6px;
+  border-radius: 10px;
+}
+
+.clipzy-back-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.clipzy-header--form {
+  justify-content: flex-start;
+  padding: 8px 14px;
+}
+
+.clipzy-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.clipzy-brand {
+  font-family: Manrope, Inter, system-ui, sans-serif;
+  font-size: 1.32rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.clipzy-pro-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(82, 168, 255, 0.4);
+  background: linear-gradient(135deg, rgba(21, 93, 252, 0.9), rgba(82, 168, 255, 0.82));
+  font-size: 0.52rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+}
+
+.clipzy-plan-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.clipzy-plan-pill--free {
+  color: #ffe8b6;
+  background: rgba(245, 158, 11, 0.18);
+  border-color: rgba(245, 158, 11, 0.28);
+}
+
+.clipzy-plan-pill--lifetime {
+  color: #dbeafe;
+  background: rgba(21, 93, 252, 0.2);
+  border-color: rgba(82, 168, 255, 0.32);
+}
+
+.clipzy-plan-note {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #dbeafe;
+  text-transform: uppercase;
+}
+
+.clipzy-top-chip {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.clipzy-kicker,
+.clipzy-note-label,
+.clipzy-field-label,
+.clipzy-stat-label,
+.clipzy-result-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.clipzy-screen-title {
+  margin: 0;
+  font-family: Manrope, Inter, system-ui, sans-serif;
+  font-size: 1.48rem;
+  line-height: 1.04;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.clipzy-screen-description,
+.clipzy-note-copy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.clipzy-install-id {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+.clipzy-install-id code {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 2px 8px;
+}
+
+.clipzy-status-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+  padding: 14px 16px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.clipzy-status-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+}
+
+.clipzy-status-disc {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex-shrink: 0;
+  color: #fff;
+}
+
+.clipzy-status-disc--error {
+  color: #fca5a5;
+}
+
+.clipzy-status-spinner {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 3px solid rgba(82, 168, 255, 0.24);
+  border-top-color: #52a8ff;
+}
+
+.clipzy-status-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 2px solid rgba(82, 168, 255, 0.3);
+}
+
+.clipzy-status-icon {
+  color: currentColor;
+}
+
+.clipzy-status-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.clipzy-note-card {
+  padding: 14px;
+}
+
+.clipzy-status-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.clipzy-status-actions > * {
+  width: 100%;
+  padding: 11px 15px;
+}
+
+.clipzy-job-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.clipzy-auth-card {
+  padding: 16px;
+}
+
+.clipzy-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: auto;
+}
+
+.clipzy-form-shell {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.clipzy-form-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  overflow: hidden;
+}
+
+.clipzy-form-divider {
+  height: 3px;
+  flex-shrink: 0;
+  margin: 0 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(82, 168, 255, 0.45), rgba(82, 168, 255, 0.7), rgba(82, 168, 255, 0.45));
+  opacity: 0.7;
+}
+
+.clipzy-form-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 0 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.clipzy-form-scroll > .clipzy-body,
+.clipzy-form-scroll > .clipzy-processing-layout,
+.clipzy-form-scroll > .clipzy-loading-screen,
+.clipzy-form-scroll > .clipzy-success-layout {
+  flex: 0 0 auto;
+  min-height: auto;
+  overflow: visible;
+  padding: 8px 0 0;
+}
+
+.clipzy-form-scroll::-webkit-scrollbar,
+.clipzy-body::-webkit-scrollbar,
+.clipzy-status-wrap::-webkit-scrollbar {
+  width: 8px;
+}
+
+.clipzy-form-scroll::-webkit-scrollbar-track,
+.clipzy-body::-webkit-scrollbar-track,
+.clipzy-status-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.clipzy-form-scroll::-webkit-scrollbar-thumb,
+.clipzy-body::-webkit-scrollbar-thumb,
+.clipzy-status-wrap::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.clipzy-form-scroll::-webkit-scrollbar-thumb:hover,
+.clipzy-body::-webkit-scrollbar-thumb:hover,
+.clipzy-status-wrap::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.26);
+  background-clip: padding-box;
+}
+
+.clipzy-form-scroll,
+.clipzy-body,
+.clipzy-status-wrap {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
+.clipzy-banner {
+  padding: 9px 12px;
+  border-radius: 16px;
+  color: #e8f0ff;
+  background: rgba(82, 168, 255, 0.1);
+  border-color: rgba(82, 168, 255, 0.28);
+  line-height: 1.35;
+  font-size: 0.78rem;
+  font-weight: 500;
+  box-shadow: inset 0 1px 4px rgba(82, 168, 255, 0.12);
+}
+
+.clipzy-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.clipzy-input-wrap,
+.clipzy-time-field,
+.clipzy-select-wrap {
+  position: relative;
+}
+
+.clipzy-time-picker {
+  position: relative;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 34px 8px 10px;
+}
+
+.clipzy-time-segment-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.clipzy-time-segment {
+  width: 30px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.clipzy-time-segment:focus {
+  outline: none;
+}
+
+.clipzy-time-colon {
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 1px;
+}
+
+.clipzy-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.56);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.clipzy-input-wrap:focus-within .clipzy-input-icon {
+  color: #52a8ff;
+}
+
+.clipzy-input-with-icon {
+  padding-left: 38px;
+}
+
+.clipzy-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.clipzy-time-input {
+  padding: 12px 36px 12px 12px;
+  text-align: center;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 1.04rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+}
+
+.clipzy-time-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.42);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.clipzy-stat-card,
+.clipzy-quality-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+}
+
+.clipzy-stat-value {
+  margin-top: 4px;
+  font-family: Manrope, Inter, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.clipzy-stat-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #52a8ff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.clipzy-quality-copy {
+  min-width: 0;
+}
+
+.clipzy-quality-summary {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.clipzy-quality-note {
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.74rem;
+}
+
+.clipzy-select-wrap {
+  min-width: 124px;
+  flex-shrink: 0;
+}
+
+.clipzy-small-pill {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  padding: 7px 11px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.clipzy-small-pill:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.clipzy-select {
+  appearance: none;
+  padding-right: 38px;
+  font-weight: 700;
+}
+
+.clipzy-select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  align-items: center;
+}
+
+.clipzy-form-footer {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  padding: 8px 14px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0) 0%, rgba(5, 5, 5, 0.16) 30%, rgba(5, 5, 5, 0.28) 100%);
+}
+
+.clipzy-ribbon {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #52a8ff, #155dfc, #9ebcf7, #52a8ff);
+  background-size: 200% auto;
+  animation: clipzy-ribbon-shimmer 2s linear infinite;
+  opacity: 0.4;
+}
+
+.clipzy-primary-button {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: Manrope, Inter, system-ui, sans-serif;
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.clipzy-ghost-action {
+  width: 100%;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.68);
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.clipzy-ghost-action:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.clipzy-spin {
+  animation: clipzy-spin 1s linear infinite;
+}
+
+.clipzy-pulse {
+  animation: clipzy-pulse-glow 2.4s ease-in-out infinite;
+}
+
+.clipzy-processing-layout,
+.clipzy-success-layout {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.clipzy-loading-screen {
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.clipzy-loading-status-card {
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.clipzy-processing-disc,
+.clipzy-success-disc {
+  width: 112px;
+  height: 112px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.clipzy-processing-ring,
+.clipzy-success-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+}
+
+.clipzy-processing-ring {
+  border: 2px solid rgba(82, 168, 255, 0.3);
+}
+
+.clipzy-processing-ring--spin {
+  inset: -6px;
+  border-color: rgba(82, 168, 255, 0.14);
+  border-top-color: #52a8ff;
+}
+
+.clipzy-success-glow {
+  background: rgba(34, 197, 94, 0.08);
+  filter: blur(20px);
+}
+
+.clipzy-processing-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 100%;
+  width: 100%;
+}
+
+.clipzy-result-card {
+  width: 100%;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clipzy-result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.clipzy-result-value {
+  color: rgba(255, 255, 255, 0.88);
+  text-align: right;
+  max-width: 65%;
+}
+
+.clipzy-result-value--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.clipzy-settings-card {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.clipzy-settings-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.clipzy-settings-actions .jewel-button-secondary,
+.clipzy-settings-actions .jewel-button-primary {
+  width: 100%;
+  padding: 12px 14px;
+}
+
+.clipzy-nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 5, 5, 0.12);
+}
+
+.clipzy-nav-item {
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.58);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+.clipzy-nav-item.is-active {
+  color: #fff;
+}
+
+.clipzy-recent-scroll {
+  gap: 8px;
+}
+
+.clipzy-recent-empty {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.56);
+  text-align: center;
+  padding: 20px;
+}
+
+.clipzy-recent-row {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.clipzy-recent-select {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+
+.clipzy-recent-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.clipzy-recent-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.clipzy-status-badge {
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-radius: 999px;
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.clipzy-status-badge--completed {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.clipzy-status-badge--failed {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.clipzy-status-badge--canceled {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.14);
+}
+
+.clipzy-status-badge--running,
+.clipzy-status-badge--pending {
+  color: #9ebcf7;
+  background: rgba(82, 168, 255, 0.14);
+}
+
+.clipzy-recent-meta {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.clipzy-recent-meta--muted {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.clipzy-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+}
+
+.clipzy-remove-btn:hover {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.clipzy-banner--error {
+  border-color: rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.1);
+  color: #fee2e2;
+}
+
+@media (max-width: 360px) {
+  .clipzy-header,
+  .clipzy-body,
+  .clipzy-form-scroll,
+  .clipzy-form-footer,
+  .clipzy-status-wrap {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .clipzy-top-chip {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 0.68rem;
+  }
+
+  .clipzy-status-hero,
+  .clipzy-two-col,
+  .clipzy-quality-card,
+  .clipzy-stat-card,
+  .clipzy-result-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .clipzy-status-hero {
+    text-align: center;
+  }
+
+  .clipzy-status-disc {
+    align-self: center;
+  }
+
+  .clipzy-select-wrap,
+  .clipzy-result-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .clipzy-result-value {
+    max-width: 100%;
+    text-align: left;
+  }
+}

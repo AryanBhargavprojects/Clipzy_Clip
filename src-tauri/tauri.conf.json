@@ -1,0 +1,61 @@
+{
+  "productName": "Clipzy",
+  "version": "0.1.0",
+  "identifier": "tech.clipzy.macos",
+  "build": {
+    "beforeDevCommand": "bun dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "bun run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "title": "Clipzy",
+        "width": 400,
+        "height": 600,
+        "minWidth": 400,
+        "minHeight": 600,
+        "maxWidth": 400,
+        "maxHeight": 600,
+        "resizable": false,
+        "maximizable": false,
+        "minimizable": false,
+        "center": false,
+        "decorations": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": false,
+        "visible": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "app",
+      "dmg"
+    ],
+    "externalBin": [
+      "binaries/yt-dlp",
+      "binaries/ffmpeg"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns"
+    ],
+    "macOS": {
+      "entitlements": "entitlements.mac.plist",
+      "exceptionDomain": null,
+      "frameworks": [],
+      "hardenedRuntime": true,
+      "providerShortName": null,
+      "signingIdentity": null
+    }
+  }
+}

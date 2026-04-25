@@ -1,0 +1,23 @@
+[package]
+name = "clipzy-macos"
+version = "0.1.0"
+description = "Clipzy macOS menu bar clip cutter"
+authors = ["you"]
+edition = "2021"
+
+[lib]
+name = "clipzy_macos_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-shell = "2"
+tauri-plugin-http = "2"
+tauri-plugin-notification = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }

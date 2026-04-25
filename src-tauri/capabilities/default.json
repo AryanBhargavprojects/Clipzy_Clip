@@ -1,0 +1,26 @@
+{
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    "notification:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        { "cmd": "open", "name": "open", "args": true },
+        { "name": "yt-dlp", "sidecar": true, "args": true },
+        { "name": "ffmpeg", "sidecar": true, "args": true }
+      ]
+    },
+    {
+      "identifier": "http:default",
+      "allow": [
+        { "url": "https://api.clipzy.tech/*" },
+        { "url": "http://127.0.0.1:3000/*" },
+        { "url": "http://localhost:3000/*" }
+      ]
+    }
+  ]
+}
