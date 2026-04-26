@@ -1,6 +1,6 @@
 [package]
 name = "clipzy-macos"
-version = "0.1.0"
+version = "0.1.1"
 description = "Clipzy macOS menu bar clip cutter"
 authors = ["you"]
 edition = "2021"

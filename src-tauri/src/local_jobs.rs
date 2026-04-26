@@ -21,6 +21,17 @@ const FINAL_OUTPUT_FILE: &str = "output.mp4";
 const CLIP_OUTPUT_FILE: &str = "clip.mp4";
 const SOURCE_OUTPUT_PREFIX: &str = "source";
 
+fn bundled_ffmpeg_path() -> Option<PathBuf> {
+    let exe = std::env::current_exe().ok()?;
+    let dir = exe.parent()?;
+    let candidate = dir.join("ffmpeg");
+    if candidate.exists() {
+        Some(candidate)
+    } else {
+        None
+    }
+}
+
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum LocalClipPlan {
@@ -636,13 +647,22 @@ async fn process_local_clip_job(app: AppHandle, manager: LocalJobManager, job_id
         &manager,
         &job_id,
         YTDLP_SIDECAR,
-        vec![
-            "--no-playlist".to_string(),
-            "--dump-single-json".to_string(),
-            "--quiet".to_string(),
-            "--no-warnings".to_string(),
-            initial.youtube_url.clone(),
-        ],
+        {
+            let mut args = vec![
+                "--no-playlist".to_string(),
+                "--dump-single-json".to_string(),
+                "--quiet".to_string(),
+                "--no-warnings".to_string(),
+                "--cookies-from-browser".to_string(),
+                "chrome".to_string(),
+            ];
+            if let Some(ffmpeg) = bundled_ffmpeg_path() {
+                args.push("--ffmpeg-location".to_string());
+                args.push(ffmpeg.to_string_lossy().to_string());
+            }
+            args.push(initial.youtube_url.clone());
+            args
+        },
         &job_dir,
     )
     .await
@@ -688,7 +708,7 @@ async fn process_local_clip_job(app: AppHandle, manager: LocalJobManager, job_id
     let title_slug = sanitize_slug(youtube_title.as_deref().unwrap_or("clipzy"));
     let video_slug = sanitize_slug(video_id.as_deref().unwrap_or(&job_id));
     let source_template = format!("{title_slug}-{video_slug}-{SOURCE_OUTPUT_PREFIX}.%(ext)s");
-    let source_path = job_dir.join(&source_template.replace(".%(ext)s", ".mp4"));
+    let _source_path = job_dir.join(&source_template.replace(".%(ext)s", ".mp4"));
 
     if let Ok(job) = manager.update_job(&job_id, |job| {
         job.stage = Some("Downloading source media".to_string());
@@ -705,20 +725,31 @@ async fn process_local_clip_job(app: AppHandle, manager: LocalJobManager, job_id
         &manager,
         &job_id,
         YTDLP_SIDECAR,
-        vec![
-            "--no-playlist".to_string(),
-            "--quiet".to_string(),
-            "--no-warnings".to_string(),
-            "-f".to_string(),
-            selector,
-            "--merge-output-format".to_string(),
-            "mp4".to_string(),
-            "-o".to_string(),
-            job_dir.join(&source_template).to_string_lossy().to_string(),
-            "--print".to_string(),
-            "after_move:filepath".to_string(),
-            initial.youtube_url.clone(),
-        ],
+        {
+            let mut args = vec![
+                "--no-playlist".to_string(),
+                "--quiet".to_string(),
+                "--no-warnings".to_string(),
+                "--cookies-from-browser".to_string(),
+                "chrome".to_string(),
+                "-f".to_string(),
+                selector,
+                "--merge-output-format".to_string(),
+                "mp4".to_string(),
+            ];
+            if let Some(ffmpeg) = bundled_ffmpeg_path() {
+                args.push("--ffmpeg-location".to_string());
+                args.push(ffmpeg.to_string_lossy().to_string());
+            }
+            args.extend_from_slice(&[
+                "-o".to_string(),
+                job_dir.join(&source_template).to_string_lossy().to_string(),
+                "--print".to_string(),
+                "after_move:filepath".to_string(),
+                initial.youtube_url.clone(),
+            ]);
+            args
+        },
         &job_dir,
     )
     .await
@@ -744,7 +775,43 @@ async fn process_local_clip_job(app: AppHandle, manager: LocalJobManager, job_id
         return;
     }
 
-    let downloaded_source = last_non_empty_line(&download_output).unwrap_or_else(|| source_path.to_string_lossy().to_string());
+    let downloaded_source = match last_non_empty_line(&download_output) {
+        Some(path) => path,
+        None => {
+            // yt-dlp didn't report a path; scan job_dir for the actual source file
+            let source_prefix = format!("{title_slug}-{video_slug}-{SOURCE_OUTPUT_PREFIX}.");
+            let mut found: Option<String> = None;
+            if let Ok(entries) = fs::read_dir(&job_dir) {
+                for entry in entries.flatten() {
+                    let name = entry.file_name();
+                    let name_str = name.to_string_lossy();
+                    if name_str.starts_with(&source_prefix)
+                        && !name_str.ends_with(".part")
+                        && entry.path().is_file()
+                    {
+                        found = Some(entry.path().to_string_lossy().to_string());
+                        break;
+                    }
+                }
+            }
+            match found {
+                Some(path) => path,
+                None => {
+                    if let Ok(job) = manager.update_job(&job_id, |job| {
+                        job.status = LocalClipJobStatus::Failed;
+                        job.stage = Some("Source file not found after download".to_string());
+                        job.error = Some(format!(
+                            "yt-dlp completed but no source file was produced. The bundled ffmpeg may not be accessible."
+                        ));
+                        job.progress = None;
+                    }) {
+                        emit_job_update(&app, &job);
+                    }
+                    return;
+                }
+            }
+        }
+    };
     let downloaded_source_path = PathBuf::from(&downloaded_source);
     let clip_path = job_dir.join(CLIP_OUTPUT_FILE);
     let final_path = job_dir.join(FINAL_OUTPUT_FILE);
