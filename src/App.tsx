@@ -9,6 +9,7 @@ import { getAppInstallId } from "./lib/store";
 const CONNECT_BASE = "https://auth.clipzy.tech/macos/connect";
 const UPGRADE_BASE = "https://clipzy.tech/upgrade";
 const POLL_INTERVAL_MS = 4_000;
+const LINKED_SYNC_INTERVAL_MS = 30_000;
 
 function buildConnectUrl(installId: string): string {
   return `${CONNECT_BASE}?installId=${encodeURIComponent(installId)}`;
@@ -80,9 +81,17 @@ function App() {
     void openExternalUrl(buildConnectUrl(installId));
   }, [installId, state.phase]);
 
+  // Poll fast while unlinked (waiting for user to link account)
   useEffect(() => {
     if (state.phase !== "unlinked") return;
     const id = setInterval(() => void checkSync(), POLL_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, [state.phase, checkSync]);
+
+  // Poll slowly while linked to pick up plan changes (e.g. after payment)
+  useEffect(() => {
+    if (state.phase !== "linked") return;
+    const id = setInterval(() => void checkSync(), LINKED_SYNC_INTERVAL_MS);
     return () => clearInterval(id);
   }, [state.phase, checkSync]);
 
